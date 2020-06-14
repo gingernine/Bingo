@@ -11,20 +11,14 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/board1")
 public class Board {
 	private static ArrayList<Session> ses = new ArrayList<>();
-	private static ArrayList<Integer> roulette = new ArrayList<>();
-
-	static {
-		for (int i = 0; i < 75; i++) {
-			roulette.add(i + 1);
-		}
-	}
 
 	@OnMessage
-	public void onMessage(String message) {
-		System.out.println("Message received : " + message);
-		for (Session s : ses) {
-			sendMessage(message, s);
-		}
+	public void onMessage(String message, Session session) {
+		System.out.println("Message received from " + session.getId());
+		sendMessage("echo => " + message, session);
+
+		int id = Integer.parseInt(session.getId());
+		new DBHandler("test").insert("test2", id, message);
 	}
 
 	@OnOpen
@@ -37,6 +31,9 @@ public class Board {
 	public void onClose(Session session) {
 		System.out.println("onClose : " + session);
 		ses.remove(session);
+
+		int id = Integer.parseInt(session.getId());
+		new DBHandler("test").delete("test2", id);
 	}
 
 	public static void sendMessage(String message, Session session) {
@@ -45,9 +42,5 @@ public class Board {
 
 	public static ArrayList<Session> getSessionSet() {
 		return ses;
-	}
-
-	public static ArrayList<Integer> getRouletteList() {
-		return roulette;
 	}
 }

@@ -1,12 +1,13 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
 	import="board1.Board"
+	import="board1.Roulette"
 	import="java.util.ArrayList"
 	import="java.util.Random"
 	import="javax.websocket.Session"%>
 <!DOCTYPE html>
 <%
 	boolean isPOST = request.getMethod().toLowerCase().equals("post");
-	ArrayList<Integer> roulette = Board.getRouletteList();
+	ArrayList<Integer> roulette = Roulette.getRouletteList();
 
 	if (isPOST) {
 		/*
