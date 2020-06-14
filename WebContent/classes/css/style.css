@@ -1,0 +1,28 @@
+h1 {
+	text-align: center;
+}
+table {
+	text-align: center;
+	font-size: 60px;
+	margin: 30px auto;
+	table-layout: fixed;
+	border-spacing: 10px;
+}
+td {
+	width: 1.8em;
+	height: 1.8em;
+	border-radius: 16px;
+}
+input.numbers {
+	text-align: center;
+	width: 1.8em;
+	height: 1.8em;
+	font-size: 60px;
+	border: none;
+	border-radius: 16px;
+	background: #eee;
+}
+form {
+	text-align: center;
+}
+
