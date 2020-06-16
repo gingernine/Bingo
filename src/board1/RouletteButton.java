@@ -1,6 +1,6 @@
 package board1;
 
-import static board1.Board.*;
+import static board1.WSServer.*;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

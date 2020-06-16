@@ -9,7 +9,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/board1")
-public class Board {
+public class WSServer {
 	private static ArrayList<Session> ses = new ArrayList<>();
 
 	@OnMessage

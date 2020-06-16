@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
-	import="board1.Board"
+	import="board1.WSServer"
 	import="board1.Roulette"
 	import="java.util.ArrayList"
 	import="java.util.Random"
@@ -15,7 +15,7 @@
 		 * Boardクラスからrouletteリストを受け取り、そこからランダムな要素を取得する
 		 * 各クライアントブラウザーに取得した数値を送信する
 		 */
-		ArrayList<Session> ses = Board.getSessionSet();
+		/*ArrayList<Session> ses = Board.getSessionSet();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
 
@@ -23,6 +23,8 @@
 			Board.sendMessage(num.toString(), s);
 		}
 		roulette.remove(num); // 同じ数値を再度取得することが無いように、取得した数値は削除する
+		*/
+		Roulette.sendResOfRoulette();
 	}
 %>
 <html>
