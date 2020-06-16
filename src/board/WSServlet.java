@@ -8,7 +8,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/board")
+@ServerEndpoint(value = "/wsservlet")
 public class WSServlet {
 	private static ArrayList<Session> ses = new ArrayList<>();
 

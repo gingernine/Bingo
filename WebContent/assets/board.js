@@ -45,7 +45,7 @@ $(function() {
 	};
 
 	$("#connect").click(function() {
-		ws = new WebSocket("ws://localhost:8080/Bingo/board");
+		ws = new WebSocket("ws://localhost:8080/Bingo/wsservlet");
 		ws.onmessage = onMessage;
 
 		$("#connect").attr("disabled", true);
