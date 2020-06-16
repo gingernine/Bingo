@@ -21,12 +21,12 @@ public class Roulette {
 		 * ランダムな要素を取得する
 		 * 各クライアントブラウザーに取得した数値を送信する
 		 */
-		ArrayList<Session> ses = WSServer.getSessionSet();
+		ArrayList<Session> ses = WSServlet.getSessionSet();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
 
 		for (Session s : ses) {
-			WSServer.sendMessage(num.toString(), s);
+			WSServlet.sendMessage(num.toString(), s);
 		}
 		roulette.remove(num); // 同じ数値を再度取得することが無いように、取得した数値は削除する
 	}
