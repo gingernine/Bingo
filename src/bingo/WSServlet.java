@@ -1,4 +1,4 @@
-package board;
+package bingo;
 
 import java.util.ArrayList;
 

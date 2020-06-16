@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
-	import="board.Roulette"
+	import="bingo.Roulette"
 	import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <%

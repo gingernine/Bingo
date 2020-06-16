@@ -1,6 +1,6 @@
-package board;
+package bingo;
 
-import static board.WSServlet.*;
+import static bingo.WSServlet.*;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

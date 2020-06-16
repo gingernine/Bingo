@@ -1,4 +1,4 @@
-package board;
+package bingo;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,11 +16,7 @@ public class Roulette {
 	}
 
 	public static void sendResOfRoulette() {
-		/*
-		 * Rouletteボタンが押された時の処理
-		 * ランダムな要素を取得する
-		 * 各クライアントブラウザーに取得した数値を送信する
-		 */
+
 		ArrayList<Session> ses = WSServlet.getSessionSet();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
@@ -28,7 +24,7 @@ public class Roulette {
 		for (Session s : ses) {
 			WSServlet.sendMessage(num.toString(), s);
 		}
-		roulette.remove(num); // 同じ数値を再度取得することが無いように、取得した数値は削除する
+		roulette.remove(num);
 	}
 
 	public static ArrayList<Integer> getRouletteList() {
