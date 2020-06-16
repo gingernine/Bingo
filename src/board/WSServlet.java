@@ -1,4 +1,4 @@
-package board1;
+package board;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/board1")
+@ServerEndpoint(value = "/board")
 public class WSServlet {
 	private static ArrayList<Session> ses = new ArrayList<>();
 

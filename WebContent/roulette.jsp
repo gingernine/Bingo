@@ -1,9 +1,6 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
-	import="board1.WSServlet"
-	import="board1.Roulette"
-	import="java.util.ArrayList"
-	import="java.util.Random"
-	import="javax.websocket.Session"%>
+	import="board.Roulette"
+	import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <%
 	boolean isPOST = request.getMethod().toLowerCase().equals("post");

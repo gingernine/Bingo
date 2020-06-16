@@ -1,4 +1,4 @@
-package board1;
+package board;
 
 import java.util.ArrayList;
 import java.util.Random;

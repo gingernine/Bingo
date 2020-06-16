@@ -45,7 +45,7 @@ $(function() {
 	};
 
 	$("#connect").click(function() {
-		ws = new WebSocket("ws://localhost:8080/BoardTest/board1");
+		ws = new WebSocket("ws://localhost:8080/Bingo/board");
 		ws.onmessage = onMessage;
 
 		$("#connect").attr("disabled", true);
@@ -60,6 +60,13 @@ $(function() {
 		arrayFromBoard = document.getElementsByClassName("numbers");
 
 		//入力数値のバリデーションチェックをする
+		for (var i = 0; i < 25; i++) {
+			/*for (!/[1-75/].test(arrayFromBoard[i].value)) {
+				alert("1から75の数値を入力して下さい");
+				flag = false;
+				break;
+			}*/
+		}
 
 		/*
 		 * サーブレットにはテキストで送るので
