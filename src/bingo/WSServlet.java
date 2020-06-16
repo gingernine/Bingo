@@ -8,22 +8,25 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/wsservlet")
+@ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
 public class WSServlet {
+
 	private static ArrayList<Session> ses = new ArrayList<>();
+	private Session session;
 
 	@OnMessage
-	public void onMessage(String message, Session session) {
+	public void onMessage(ReceivedMessage rm) {
 		System.out.println("Message received from " + session.getId());
-		sendMessage("echo => " + message, session);
+		sendMessage("echo => " + rm.name + ":" + rm.values, session);
 
 		int id = Integer.parseInt(session.getId());
-		new DBHandler("test").insert("test2", id, message);
+		new DBHandler("test").insert("test3", id, rm.name, rm.values);
 	}
 
 	@OnOpen
 	public void onOpen(Session session) {
 		System.out.println("onOpen : " + session);
+		this.session = session;
 		ses.add(session);
 	}
 
@@ -33,7 +36,7 @@ public class WSServlet {
 		ses.remove(session);
 
 		int id = Integer.parseInt(session.getId());
-		new DBHandler("test").delete("test2", id);
+		new DBHandler("test").delete("test3", id);
 	}
 
 	public static void sendMessage(String message, Session session) {

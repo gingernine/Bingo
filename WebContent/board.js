@@ -25,6 +25,7 @@ function dispBoard() {
 
 $(function() {
 	var ws; // WebSocketオブジェクトへの参照を格納
+	var username; // ユーザーネームを格納
 	var arrayFromBoard; // ビンゴボードの各セルに埋め込んだinputタグを取得
 
 	var onMessage = function(event) {
@@ -45,6 +46,14 @@ $(function() {
 	};
 
 	$("#connect").click(function() {
+		if ($("#username").val() == "") {
+			alert("名前を入力して下さい");
+			return;
+		}
+
+		username = $("#username").val();
+		$("#username").attr("readonly", true);
+
 		ws = new WebSocket("ws://localhost:8080/Bingo/wsservlet");
 		ws.onmessage = onMessage;
 
@@ -72,10 +81,12 @@ $(function() {
 		 * サーブレットにはテキストで送るので
 		 * ビンゴボードの数値をカンマ区切りで連結する
 		 */
-		var msg = "";
+		var values = "";
 		for (var i = 0; i < 25; i++) {
-			msg += arrayFromBoard[i].value + ",";
+			values += arrayFromBoard[i].value + ",";
 		}
+
+		var msg = "username:" + username + ";values:" + values;
 		ws.send(msg);
 
 		$(".numbers").attr("readonly", true);

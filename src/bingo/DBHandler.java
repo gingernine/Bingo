@@ -14,8 +14,8 @@ public class DBHandler {
 		url = "jdbc:postgresql://localhost:5432/" + dbname;
 	}
 
-	public void insert(String table, int id, String value) {
-		String SQL = "INSERT INTO " + table + " VALUES(?,?)";
+	public void insert(String table, int id, String value1, String value2) {
+		String SQL = "INSERT INTO " + table + " VALUES(?,?,?)";
 
 		try (Connection con = DriverManager.getConnection(url, usr, passwd)) {
 
@@ -23,7 +23,8 @@ public class DBHandler {
 
 			try (PreparedStatement ps = con.prepareStatement(SQL)) {
 				ps.setInt(1, id);
-				ps.setString(2, value);
+				ps.setString(2, value1);
+				ps.setString(3, value2);
 
 				ps.executeUpdate();
 				con.commit();
