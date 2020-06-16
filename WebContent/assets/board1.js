@@ -119,6 +119,14 @@ $(function() {
 	});
 
 	$("#disconnect").click(function() {
+		for (var i = 0; i < 25; i++) {
+			if (i == 12) {
+				continue;
+			}
+			var id = "#number" + i;
+			$(id).attr("value", "");
+			$(id).attr("readonly", false);
+		}
 		$("#connect").attr("disabled", false);
 		$("#send").attr("disabled", true);
 		$("#random").attr("disabled", true);
