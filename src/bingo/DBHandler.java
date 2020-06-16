@@ -3,6 +3,8 @@ package bingo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DBHandler {
 
@@ -50,6 +52,29 @@ public class DBHandler {
 
 				ps.executeUpdate();
 				con.commit();
+			} catch (Exception e) {
+				con.rollback();
+				System.out.println("rollback");
+				throw e;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void select(String table, int id, String col) {
+		String SQL = "SELECT * FROM " + table + " WHERE id = " + id;
+
+		try (Connection con = DriverManager.getConnection(url, usr, passwd)) {
+
+			con.setAutoCommit(false);
+
+			try (Statement st = con.createStatement();
+					ResultSet rs = st.executeQuery(SQL)) {
+
+				rs.next();
+				System.out.println(rs.getString(col));
+
 			} catch (Exception e) {
 				con.rollback();
 				System.out.println("rollback");

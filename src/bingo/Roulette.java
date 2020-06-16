@@ -25,6 +25,8 @@ public class Roulette {
 		Integer num = roulette.get(ind);
 
 		for (Session s : ses) {
+			int id = Integer.parseInt(s.getId());
+			isBingo(id);
 			WSServlet.sendMessage(num.toString(), s);
 		}
 		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
@@ -32,5 +34,10 @@ public class Roulette {
 
 	public static ArrayList<Integer> getRouletteList() {
 		return roulette;
+	}
+
+	private static boolean isBingo(int id) {
+		new DBHandler("test").select("test3", id, "values");
+		return true;
 	}
 }

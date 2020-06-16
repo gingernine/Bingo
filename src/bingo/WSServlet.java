@@ -13,13 +13,14 @@ public class WSServlet {
 
 	private static ArrayList<Session> ses = new ArrayList<>();
 	private Session session;
+	private int id; // session id
 
 	@OnMessage
 	public void onMessage(ReceivedMessage rm) {
 		System.out.println("Message received from " + session.getId());
 		sendMessage("echo => " + rm.name + ":" + rm.values, session);
 
-		int id = Integer.parseInt(session.getId());
+		id = Integer.parseInt(session.getId());
 		new DBHandler("test").insert("test3", id, rm.name, rm.values);
 	}
 
@@ -35,7 +36,6 @@ public class WSServlet {
 		System.out.println("onClose : " + session);
 		ses.remove(session);
 
-		int id = Integer.parseInt(session.getId());
 		new DBHandler("test").delete("test3", id);
 	}
 
