@@ -16,7 +16,10 @@ public class Roulette {
 	}
 
 	public static void sendResOfRoulette() {
-
+		/*
+		 * ホストがRouletteを回した時の処理
+		 * リストから値をランダム選択し全てのクライアントに送信する
+		 */
 		ArrayList<Session> ses = WSServlet.getSessionSet();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
@@ -24,7 +27,7 @@ public class Roulette {
 		for (Session s : ses) {
 			WSServlet.sendMessage(num.toString(), s);
 		}
-		roulette.remove(num);
+		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
 	}
 
 	public static ArrayList<Integer> getRouletteList() {
