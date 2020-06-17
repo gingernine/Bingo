@@ -70,7 +70,7 @@ $(function() {
 		username = $("#username").val();
 		$("#username").attr("readonly", true);
 
-		ws = new WebSocket("ws://192.168.10.246:8080/Bingo/wsservlet");
+		ws = new WebSocket("ws://localhost:8080/Bingo/wsservlet");
 		ws.onmessage = onMessage;
 
 		$("#connect").attr("disabled", true);

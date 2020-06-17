@@ -15,6 +15,10 @@ public class Roulette {
 		}
 	}
 
+	public static ArrayList<Integer> getRouletteList() {
+		return roulette;
+	}
+
 	public static void sendResOfRoulette() {
 		/*
 		 * ホストがRouletteを回した時の処理
@@ -26,6 +30,8 @@ public class Roulette {
 
 		for (Session s : ses) {
 			int id = Integer.parseInt(s.getId());
+			update(id, num);
+
 			String message = "message:";
 
 			if (isBingo(id)) {
@@ -42,24 +48,71 @@ public class Roulette {
 		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
 	}
 
-	public static ArrayList<Integer> getRouletteList() {
-		return roulette;
-	}
-
 	private static boolean isBingo(int id) {
-		String values = new DBHandler("test").select("test3", id, "values");
-		String[] valuesArray = values.split(",");
+		DBHandler handler = new DBHandler();
+		int[][] grid = new int[5][5];
 
 		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				String getval = handler.select("flag", id, "value" + (i * 5 + j));
+				grid[i][j] = Integer.parseInt(getval);
+			}
+		}
 
+		if (grid[0][0] + grid[1][1] + grid[2][2] + grid[3][3] + grid[4][4] == 5) {
+			return true;
+		}
+		if (grid[0][4] + grid[1][3] + grid[2][2] + grid[3][1] + grid[4][0] == 5) {
+			return true;
+		}
+		for (int k = 0; k < 5; k++) {
+			if (grid[k][0] + grid[k][1] + grid[k][2] + grid[k][3] + grid[k][4] == 5) {
+				return true;
+			}
+			if (grid[0][k] + grid[1][k] + grid[2][k] + grid[3][k] + grid[4][k] == 5) {
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	private static boolean isReach(int id) {
-		String values = new DBHandler("test").select("test3", id, "values");
-		String[] valuesArray = values.split(",");
+		DBHandler handler = new DBHandler();
+		int[][] grid = new int[5][5];
+
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				String getval = handler.select("flag", id, "value" + (i * 5 + j));
+				grid[i][j] = Integer.parseInt(getval);
+			}
+		}
+
+		if (grid[0][0] + grid[1][1] + grid[2][2] + grid[3][3] + grid[4][4] == 4) {
+			return true;
+		}
+		if (grid[0][4] + grid[1][3] + grid[2][2] + grid[3][1] + grid[4][0] == 4) {
+			return true;
+		}
+		for (int k = 0; k < 5; k++) {
+			if (grid[k][0] + grid[k][1] + grid[k][2] + grid[k][3] + grid[k][4] == 4) {
+				return true;
+			}
+			if (grid[0][k] + grid[1][k] + grid[2][k] + grid[3][k] + grid[4][k] == 4) {
+				return true;
+			}
+		}
+
 		return false;
+	}
+
+	private static void update(int id, Integer num) {
+		DBHandler handler = new DBHandler();
+		for (int i = 0; i < 25; i++) {
+			String value = handler.select("board", id, "value" + i);
+			if (value.equals(num.toString())) {
+				handler.update("flag", id, "value" + i, "1");
+			}
+		}
 	}
 }

@@ -18,10 +18,19 @@ public class WSServlet {
 	@OnMessage
 	public void onMessage(ReceivedMessage rm) {
 		System.out.println("Message received from " + session.getId());
-		//sendMessage("echo => " + rm.name + ":" + rm.values, session);
-		System.out.println(rm.name + ":" + rm.values);
+
+		DBHandler handler = new DBHandler();
 		id = Integer.parseInt(session.getId());
-		new DBHandler("test").insert("test3", id, rm.name, rm.values);
+
+		String[] values = rm.values.split(",");
+		handler.insert("board", id, rm.name, values);
+
+		String[]  flags = {"0","0","0","0","0",
+				"0","0","0","0","0",
+				"0","0","1","0","0",
+				"0","0","0","0","0",
+				"0","0","0","0","0"};
+		handler.insert("flag", id, rm.name, flags);
 	}
 
 	@OnOpen
@@ -36,7 +45,9 @@ public class WSServlet {
 		System.out.println("onClose : " + session);
 		ses.remove(session);
 
-		new DBHandler("test").delete("test3", id);
+		DBHandler handler = new DBHandler();
+		handler.delete("board", id);
+		handler.delete("flag", id);
 	}
 
 	public static void sendMessage(String message, Session session) {
