@@ -62,8 +62,9 @@ public class DBHandler {
 		}
 	}
 
-	public void select(String table, int id, String col) {
+	public String select(String table, int id, String col) {
 		String SQL = "SELECT * FROM " + table + " WHERE id = " + id;
+		String res = null;
 
 		try (Connection con = DriverManager.getConnection(url, usr, passwd)) {
 
@@ -73,7 +74,7 @@ public class DBHandler {
 					ResultSet rs = st.executeQuery(SQL)) {
 
 				rs.next();
-				System.out.println(rs.getString(col));
+				res = rs.getString(col);
 
 			} catch (Exception e) {
 				con.rollback();
@@ -83,5 +84,7 @@ public class DBHandler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		return res;
 	}
 }

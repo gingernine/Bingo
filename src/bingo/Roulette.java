@@ -26,8 +26,18 @@ public class Roulette {
 
 		for (Session s : ses) {
 			int id = Integer.parseInt(s.getId());
-			isBingo(id);
-			WSServlet.sendMessage(num.toString(), s);
+			String message = "message:";
+
+			if (isBingo(id)) {
+				message += "Bingo!";
+			}
+
+			if (isReach(id)) {
+				message += "Reach!";
+			}
+
+			message += ";num:" + num.toString();
+			WSServlet.sendMessage(message, s);
 		}
 		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
 	}
@@ -37,7 +47,19 @@ public class Roulette {
 	}
 
 	private static boolean isBingo(int id) {
-		new DBHandler("test").select("test3", id, "values");
-		return true;
+		String values = new DBHandler("test").select("test3", id, "values");
+		String[] valuesArray = values.split(",");
+
+		for (int i = 0; i < 5; i++) {
+
+		}
+
+		return false;
+	}
+
+	private static boolean isReach(int id) {
+		String values = new DBHandler("test").select("test3", id, "values");
+		String[] valuesArray = values.split(",");
+		return false;
 	}
 }

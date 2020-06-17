@@ -28,6 +28,20 @@ $(function() {
 	var username; // ユーザーネームを格納
 	var arrayFromBoard; // ビンゴボードの各セルに埋め込んだinputタグを取得
 
+	function separator(text) {
+
+		var obj = {};
+
+		var tokens = text.split(";");
+		var subtokens1 = tokens[0].split(":");
+		var subtokens2 = tokens[1].split(":");
+
+		obj.message = subtokens1[1];
+		obj.num = subtokens2[1];
+
+		return obj;
+	}
+
 	var onMessage = function(event) {
 		/*
 		 * 今回はサーバーからはルーレットで出た数値しか送られてこない
@@ -35,8 +49,10 @@ $(function() {
 		 * そのセルの背景色を変更する
 		 */
 		console.log("Number received from Servlet: " + event.data);
+		var d = separator(event.data);
+
 		for (var i = 0; i < arrayFromBoard.length; i++) {
-			if (arrayFromBoard[i].value == event.data) {
+			if (arrayFromBoard[i].value == d.num) {
 				console.log("hit!");
 				var id = "#number" + i;
 				$(id).css("background", "red");
@@ -54,7 +70,7 @@ $(function() {
 		username = $("#username").val();
 		$("#username").attr("readonly", true);
 
-		ws = new WebSocket("ws://localhost:8080/Bingo/wsservlet");
+		ws = new WebSocket("ws://192.168.10.246:8080/Bingo/wsservlet");
 		ws.onmessage = onMessage;
 
 		$("#connect").attr("disabled", true);
@@ -69,13 +85,23 @@ $(function() {
 		arrayFromBoard = document.getElementsByClassName("numbers");
 
 		//入力数値のバリデーションチェックをする
+		/*var flag = true;
+		const regex = RegExp('\[1-75\]');
+
 		for (var i = 0; i < 25; i++) {
-			/*for (!/[1-75/].test(arrayFromBoard[i].value)) {
-				alert("1から75の数値を入力して下さい");
+			if (i == 12) {
+				continue;
+			}
+
+			if (!regex.test(arrayFromBoard[i].value)) {
+				$("#alert").html("1から75の数値を入力して下さい");
+				$("#alert").css("color", "red");
 				flag = false;
-				break;
-			}*/
+				return;
+			}
 		}
+
+		$("#alert").html("");*/
 
 		/*
 		 * サーブレットにはテキストで送るので
@@ -129,9 +155,10 @@ $(function() {
 				continue;
 			}
 			var id = "#number" + i;
-			$(id).attr("value", numarray[i]);
+			$(id).val(numarray[i]);
 		}
 
+		$("#alert").html("");
 		$(".numbers").attr("readonly", true);
 		$("#message").html("Click the Send button");
 	});

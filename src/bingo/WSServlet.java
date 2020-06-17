@@ -18,8 +18,8 @@ public class WSServlet {
 	@OnMessage
 	public void onMessage(ReceivedMessage rm) {
 		System.out.println("Message received from " + session.getId());
-		sendMessage("echo => " + rm.name + ":" + rm.values, session);
-
+		//sendMessage("echo => " + rm.name + ":" + rm.values, session);
+		System.out.println(rm.name + ":" + rm.values);
 		id = Integer.parseInt(session.getId());
 		new DBHandler("test").insert("test3", id, rm.name, rm.values);
 	}
