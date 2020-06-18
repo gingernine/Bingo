@@ -8,6 +8,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import dbhandler.DBHandler;
+
 @ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
 public class WSServlet {
 
@@ -22,15 +24,31 @@ public class WSServlet {
 		DBHandler handler = new DBHandler();
 		id = Integer.parseInt(session.getId());
 
+		// ビンゴボードの数値をデータベースに保存するためのINSERT文を作成する
 		String[] values = rm.values.split(",");
-		handler.insert("board", id, rm.name, values);
+		String SQL1 = "INSERT INTO board VALUES (";
+		SQL1 += id;
+		SQL1 += " ,'" + rm.name + "'";
+		for (int i = 0; i < 25; i++) {
+			SQL1 += " ,'" + values[i] + "'";
+		}
+		SQL1 += ")";
+		handler.executeSQL(SQL1);
 
-		String[]  flags = {"0","0","0","0","0",
-				"0","0","0","0","0",
-				"0","0","1","0","0",
-				"0","0","0","0","0",
-				"0","0","0","0","0"};
-		handler.insert("flag", id, rm.name, flags);
+		// ビンゴ判定用のフラグ列をデータベースに保存するためのINSERT文を作成する
+		int[] flags = {0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0,
+				0, 0, 1, 0, 0,
+				0, 0, 0, 0, 0,
+				0, 0, 0, 0, 0};
+		String SQL2 = "INSERT INTO flags VALUES (";
+		SQL2 += id;
+		SQL2 += " ,'" + rm.name + "'";
+		for (int i = 0; i < 25; i++) {
+			SQL2 += " ," + flags[i];
+		}
+		SQL2 += ")";
+		handler.executeSQL(SQL2);
 	}
 
 	@OnOpen
@@ -46,8 +64,8 @@ public class WSServlet {
 		ses.remove(session);
 
 		DBHandler handler = new DBHandler();
-		handler.delete("board", id);
-		handler.delete("flag", id);
+		handler.executeSQL("DELETE FROM board WHERE id = " + id);
+		handler.executeSQL("DELETE FROM flags WHERE id = " + id);
 	}
 
 	public static void sendMessage(String message, Session session) {

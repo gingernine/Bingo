@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
 	import="bingo.Roulette"
-	import="bingo.DBHandler"
+	import="dbhandler.DBHandler"
 	import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <%
@@ -15,13 +15,31 @@
 	}
 	if (isCreate) {
 		DBHandler handler = new DBHandler();
-		handler.createTable("board");
-		handler.createTable("flag");
+
+		String SQL1 = "CREATE TABLE board (";
+		SQL1 += "id INTEGER";
+		SQL1 += ", name VARCHAR(20)";
+		for (int i = 0; i < 25; i++) {
+			SQL1 += ", value" + i + " VARCHAR(20)";
+		}
+		SQL1 += ")";
+		handler.executeSQL(SQL1);
+
+		String SQL2 = "CREATE TABLE flags (";
+		SQL2 += "id INTEGER";
+		SQL2 += ", name VARCHAR(20)";
+		for (int i = 0; i < 25; i++) {
+			SQL2 += ", flag" + i + " INTEGER";
+		}
+		SQL2 += ")";
+		handler.executeSQL(SQL2);
+
 	}
+
 	if (isDrop) {
 		DBHandler handler = new DBHandler();
-		handler.dropTable("board");
-		handler.dropTable("flag");
+		handler.executeSQL("DROP TABLE board");
+		handler.executeSQL("DROP TABLE flags");
 	}
 %>
 <html>

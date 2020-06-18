@@ -5,6 +5,8 @@ import java.util.Random;
 
 import javax.websocket.Session;
 
+import dbhandler.DBHandler;
+
 public class Roulette {
 
 	private static ArrayList<Integer> roulette = new ArrayList<>();
@@ -49,13 +51,14 @@ public class Roulette {
 	}
 
 	private static boolean isBingo(int id) {
+
 		DBHandler handler = new DBHandler();
 		int[][] grid = new int[5][5];
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				String getval = handler.select("flag", id, "value" + (i * 5 + j));
-				grid[i][j] = Integer.parseInt(getval);
+				String SQL = "SELECT * FROM flags WHERE id = " + id;
+				grid[i][j] = handler.getResultInt(SQL, "flag" + (i * 5 + j));
 			}
 		}
 
@@ -75,6 +78,7 @@ public class Roulette {
 		}
 
 		return false;
+
 	}
 
 	private static boolean isReach(int id) {
@@ -83,8 +87,8 @@ public class Roulette {
 
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				String getval = handler.select("flag", id, "value" + (i * 5 + j));
-				grid[i][j] = Integer.parseInt(getval);
+				String SQL = "SELECT * FROM flags WHERE id = " + id;
+				grid[i][j] = handler.getResultInt(SQL, "flag" + (i * 5 + j));
 			}
 		}
 
@@ -104,14 +108,19 @@ public class Roulette {
 		}
 
 		return false;
+
 	}
 
 	private static void update(int id, Integer num) {
+
 		DBHandler handler = new DBHandler();
+		String SQL = "SELECT * FROM board WHERE id = " + id;
+
 		for (int i = 0; i < 25; i++) {
-			String value = handler.select("board", id, "value" + i);
-			if (value.equals(num.toString())) {
-				handler.update("flag", id, "value" + i, "1");
+			String res = handler.getResultString(SQL, "value" + i);
+			if (res.equals(num.toString())) {
+				handler.executeSQL("UPDATE flags SET flag" + i + " = " + 1 + " WHERE id = " + id);
+				break;
 			}
 		}
 	}
