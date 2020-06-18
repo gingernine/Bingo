@@ -5,8 +5,6 @@ import java.util.Random;
 
 import javax.websocket.Session;
 
-import dbhandler.DBHandler;
-
 public class Roulette {
 
 	private static ArrayList<Integer> roulette = new ArrayList<>();
@@ -90,6 +88,7 @@ public class Roulette {
 				String SQL = "SELECT * FROM flags WHERE id = " + id;
 				grid[i][j] = handler.getResultInt(SQL, "flag" + (i * 5 + j));
 			}
+			System.out.println();
 		}
 
 		if (grid[0][0] + grid[1][1] + grid[2][2] + grid[3][3] + grid[4][4] == 4) {

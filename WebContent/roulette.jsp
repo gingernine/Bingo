@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
 	import="bingo.Roulette"
-	import="dbhandler.DBHandler"
+	import="bingo.DBHandler"
 	import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <%

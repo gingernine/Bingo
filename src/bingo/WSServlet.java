@@ -8,8 +8,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import dbhandler.DBHandler;
-
 @ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
 public class WSServlet {
 
