@@ -84,24 +84,29 @@ $(function() {
 	$("#send").click(function() {
 		arrayFromBoard = document.getElementsByClassName("numbers");
 
-		//入力数値のバリデーションチェックをする
-		/*var flag = true;
-		const regex = RegExp('\[1-75\]');
+		/*
+		 * 入力数値のバリデーションチェックをする
+		 * 1から75までの数値に一致しなければ警告画面を表示する
+		 */
+		const regex1 = RegExp('^[1-9]$');
+		const regex2 = RegExp('^[1-6][0-9]$');
+		const regex3 = RegExp('^7[0-5]$');
 
 		for (var i = 0; i < 25; i++) {
 			if (i == 12) {
 				continue;
 			}
 
-			if (!regex.test(arrayFromBoard[i].value)) {
+			if (!regex1.test(arrayFromBoard[i].value) &&
+					!regex2.test(arrayFromBoard[i].value) &&
+					!regex3.test(arrayFromBoard[i].value)) {
 				$("#alert").html("1から75の数値を入力して下さい");
 				$("#alert").css("color", "red");
-				flag = false;
 				return;
 			}
 		}
 
-		$("#alert").html("");*/
+		$("#alert").html("");
 
 		/*
 		 * サーブレットにはテキストで送るので
