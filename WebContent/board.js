@@ -26,6 +26,8 @@ $(function() {
 		console.log("Number received from Servlet: " + event.data);
 		var d = separator(event.data);
 
+		$("#message").html(d.num);
+
 		for (var i = 0; i < 25; i++) {
 			if (arrayOfBoardNums[i] == d.num) {
 				console.log("hit!");
@@ -50,7 +52,7 @@ $(function() {
 
 		$("#connect").attr("disabled", true);
 		$("#send").attr("disabled", false);
-		$("#random").attr("disabled", false);
+		$("#auto").attr("disabled", false);
 		$("#disconnect").attr("disabled", false);
 
 		$("#message").html("Input numbers into the board");
@@ -114,12 +116,12 @@ $(function() {
 
 		$(".card").attr("readonly", true);
 		$("#send").attr("disabled", true);
-		$("#random").attr("disabled", true);
+		$("#auto").attr("disabled", true);
 
 		$("#message").html("Roulette will start soon");
 	});
 
-	$("#random").click(function() {
+	$("#auto").click(function() {
 		/*
 		 * ユーザーが直接入力ではなく自動入力を選択した場合の処理
 		 * ユーザーに代わってビンゴボードにランダムな数値を割り当てる
@@ -170,7 +172,7 @@ $(function() {
 		}
 		$("#connect").attr("disabled", false);
 		$("#send").attr("disabled", true);
-		$("#random").attr("disabled", true);
+		$("#auto").attr("disabled", true);
 		$("#disconnect").attr("disabled", true);
 
 		$("#message").html("Thank you !");
