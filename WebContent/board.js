@@ -1,28 +1,3 @@
-function dispBoard() {
-	/*
-	 * ユーザー入力用のビンゴボードを作成する
-	 */
-	document.write("<table>");
-	for (var i = 0; i < 5; i++) {
-		document.write("<tr>");
-		for (var j = 0; j < 5; j++) {
-			document.write("<td>");
-			if (i == 2 && j == 2) {
-				document.write("<input type='text' id='" +
-						"number" + (i * 5 + j) +
-						"' class='numbers' value='B' readonly>");
-			} else {
-				document.write("<input type='text' id='" +
-						"number" + (i * 5 + j) +
-						"' class='numbers' value=''>");
-			}
-			document.write("</td>");
-		}
-		document.write("</tr>");
-	}
-	document.write("</table>");
-}
-
 $(function() {
 	var ws; // WebSocketオブジェクトへの参照を格納
 	var username; // ユーザーネームを格納
@@ -82,10 +57,12 @@ $(function() {
 	});
 
 	$("#send").click(function() {
-		var arrayOfInputTags = document.getElementsByClassName("numbers"); // ビンゴボードの各セルに埋め込んだinputタグを保持（配列）
+		var arrayOfInputTags = document.getElementsByClassName("card"); // ビンゴボードの各セルに埋め込んだinputタグを保持（配列）
 		for (var i = 0; i < 25; i++) {
 			arrayOfBoardNums[i] = arrayOfInputTags[i].value;
 		}
+
+		console.log(arrayOfBoardNums);
 
 		/*
 		 * 入力数値のバリデーションチェックをする
@@ -135,7 +112,7 @@ $(function() {
 		var msg = "username:" + username + ";values:" + values;
 		ws.send(msg);
 
-		$(".numbers").attr("readonly", true);
+		$(".card").attr("readonly", true);
 		$("#send").attr("disabled", true);
 		$("#random").attr("disabled", true);
 
