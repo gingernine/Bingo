@@ -1,14 +1,15 @@
 <%@page language="java" contentType="text/html" pageEncoding="utf-8"
 	import="bingo.Roulette"
 	import="bingo.DBHandler"
-	import="java.util.ArrayList"%>
+	import="java.util.ArrayList"
+	import="java.util.List"%>
 <!DOCTYPE html>
 <%
 	//boolean isPOST = request.getMethod().toLowerCase().equals("post");
 	boolean isRoulette = request.getParameter("roulette") != null;
 	boolean isCreate = request.getParameter("create") != null;
 	boolean isDrop = request.getParameter("drop") != null;
-	ArrayList<Integer> roulette = Roulette.getRouletteList();
+	List<Integer> roulette = Roulette.getRouletteList();
 
 	if (isRoulette) {
 		Roulette.sendResOfRoulette();

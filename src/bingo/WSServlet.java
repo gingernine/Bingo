@@ -1,6 +1,7 @@
 package bingo;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -11,7 +12,7 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
 public class WSServlet {
 
-	private static ArrayList<Session> ses = new ArrayList<>();
+	private static List<Session> ses = new CopyOnWriteArrayList<>();
 	private Session session;
 	private int id; // session id
 
@@ -70,7 +71,7 @@ public class WSServlet {
 		session.getAsyncRemote().sendText(message);
 	}
 
-	public static ArrayList<Session> getSessionSet() {
+	public static List<Session> getSessionSet() {
 		return ses;
 	}
 }

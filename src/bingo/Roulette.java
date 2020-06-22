@@ -1,13 +1,14 @@
 package bingo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.websocket.Session;
 
 public class Roulette {
 
-	private static ArrayList<Integer> roulette = new ArrayList<>();
+	private static List<Integer> roulette = new ArrayList<>();
 
 	static {
 		for (int i = 0; i < 75; i++) {
@@ -15,7 +16,7 @@ public class Roulette {
 		}
 	}
 
-	public static ArrayList<Integer> getRouletteList() {
+	public static List<Integer> getRouletteList() {
 		return roulette;
 	}
 
@@ -24,7 +25,7 @@ public class Roulette {
 		 * ホストがRouletteを回した時の処理
 		 * リストから値をランダム選択し全てのクライアントに送信する
 		 */
-		ArrayList<Session> ses = WSServlet.getSessionSet();
+		List<Session> ses = WSServlet.getSessionSet();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
 

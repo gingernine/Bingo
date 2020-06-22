@@ -1,5 +1,4 @@
 package bingo;
-
 import static bingo.WSServlet.*;
 
 import java.awt.BorderLayout;
@@ -7,7 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -35,7 +34,7 @@ public class RouletteButton extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Random rand = new Random();
 				Integer x = rand.nextInt(75) + 1;
-				ArrayList<Session> ses = getSessionSet();
+				List<Session> ses = getSessionSet();
 
 				for (Session s : ses) {
 					System.out.println(x);

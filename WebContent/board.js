@@ -26,7 +26,7 @@ function dispBoard() {
 $(function() {
 	var ws; // WebSocketオブジェクトへの参照を格納
 	var username; // ユーザーネームを格納
-	var arrayFromBoard; // ビンゴボードの各セルに埋め込んだinputタグを取得
+	var arrayOfBoardNums = new Array(25); // ビンゴボードの各セルの数値を保持（配列）
 
 	function separator(text) {
 
@@ -51,8 +51,8 @@ $(function() {
 		console.log("Number received from Servlet: " + event.data);
 		var d = separator(event.data);
 
-		for (var i = 0; i < arrayFromBoard.length; i++) {
-			if (arrayFromBoard[i].value == d.num) {
+		for (var i = 0; i < 25; i++) {
+			if (arrayOfBoardNums[i] == d.num) {
 				console.log("hit!");
 				var id = "#number" + i;
 				$(id).css("background", "red");
@@ -82,10 +82,15 @@ $(function() {
 	});
 
 	$("#send").click(function() {
-		arrayFromBoard = document.getElementsByClassName("numbers");
+		var arrayOfInputTags = document.getElementsByClassName("numbers"); // ビンゴボードの各セルに埋め込んだinputタグを保持（配列）
+		for (var i = 0; i < 25; i++) {
+			arrayOfBoardNums[i] = arrayOfInputTags[i].value;
+		}
 
 		/*
 		 * 入力数値のバリデーションチェックをする
+		 */
+		/*
 		 * 1から75までの数値に一致しなければ警告画面を表示する
 		 */
 		const regex1 = RegExp('^[1-9]$');
@@ -97,13 +102,23 @@ $(function() {
 				continue;
 			}
 
-			if (!regex1.test(arrayFromBoard[i].value) &&
-					!regex2.test(arrayFromBoard[i].value) &&
-					!regex3.test(arrayFromBoard[i].value)) {
+			if (!regex1.test(arrayOfBoardNums[i]) &&
+					!regex2.test(arrayOfBoardNums[i]) &&
+					!regex3.test(arrayOfBoardNums[i])) {
 				$("#alert").html("1から75の数値を入力して下さい");
 				$("#alert").css("color", "red");
 				return;
 			}
+		}
+
+		/*
+		 * 入力値に重複があれば警告画面を表示する
+		 */
+		var s = new Set(arrayOfBoardNums);
+		if (s.size != 25) {
+			$("#alert").html("数値に重複があります");
+			$("#alert").css("color", "red");
+			return
 		}
 
 		$("#alert").html("");
@@ -114,7 +129,7 @@ $(function() {
 		 */
 		var values = "";
 		for (var i = 0; i < 25; i++) {
-			values += arrayFromBoard[i].value + ",";
+			values += arrayOfBoardNums[i] + ",";
 		}
 
 		var msg = "username:" + username + ";values:" + values;
@@ -164,7 +179,6 @@ $(function() {
 		}
 
 		$("#alert").html("");
-		$(".numbers").attr("readonly", true);
 		$("#message").html("Click the Send button");
 	});
 
