@@ -60,7 +60,7 @@ public class DBHandler {
 
 	public int getResultInt(String SQL, String col) {
 
-		int res = -1;
+		int res = 0;
 
 		try (Connection con = DriverManager.getConnection(url, usr, passwd)) {
 

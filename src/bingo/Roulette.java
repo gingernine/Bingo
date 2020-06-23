@@ -2,6 +2,7 @@ package bingo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.websocket.Session;
@@ -26,40 +27,42 @@ public class Roulette {
 		 * リストから値をランダム選択し全てのクライアントに送信する
 		 */
 		List<Session> ses = WSServlet.getSessionSet();
+		Map<Session, int[][]> flags = WSServlet.getFlags();
 		int ind = new Random().nextInt(roulette.size());
 		Integer num = roulette.get(ind);
+		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
 
 		for (Session s : ses) {
+
 			int id = Integer.parseInt(s.getId());
-			update(id, num);
+
+			DBHandler handler = new DBHandler();
+			String SQL = "SELECT * FROM board WHERE id = " + id;
+			int[][] grid = flags.get(s);
+
+			for (int i = 0; i < 25; i++) {
+				String res = handler.getResultString(SQL, "value" + i);
+				if (res.equals(num.toString())) {
+					grid[i/5][i%5] = 1;
+					break;
+				}
+			}
 
 			String message = "message:";
 
-			if (isBingo(id)) {
+			if (isBingo(grid)) {
 				message += "Bingo!";
-			}
-
-			if (isReach(id)) {
+			} else if (isReach(grid)) {
 				message += "Reach!";
 			}
 
 			message += ";num:" + num.toString();
 			WSServlet.sendMessage(message, s);
 		}
-		roulette.remove(num); // 同じ値が再度選ばれることが無いように、取得した値はリストから削除
+
 	}
 
-	private static boolean isBingo(int id) {
-
-		DBHandler handler = new DBHandler();
-		int[][] grid = new int[5][5];
-
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				String SQL = "SELECT * FROM flags WHERE id = " + id;
-				grid[i][j] = handler.getResultInt(SQL, "flag" + (i * 5 + j));
-			}
-		}
+	private static boolean isBingo(int[][] grid) {
 
 		if (grid[0][0] + grid[1][1] + grid[2][2] + grid[3][3] + grid[4][4] == 5) {
 			return true;
@@ -80,17 +83,7 @@ public class Roulette {
 
 	}
 
-	private static boolean isReach(int id) {
-		DBHandler handler = new DBHandler();
-		int[][] grid = new int[5][5];
-
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				String SQL = "SELECT * FROM flags WHERE id = " + id;
-				grid[i][j] = handler.getResultInt(SQL, "flag" + (i * 5 + j));
-			}
-			System.out.println();
-		}
+	private static boolean isReach(int[][] grid) {
 
 		if (grid[0][0] + grid[1][1] + grid[2][2] + grid[3][3] + grid[4][4] == 4) {
 			return true;
@@ -111,17 +104,4 @@ public class Roulette {
 
 	}
 
-	private static void update(int id, Integer num) {
-
-		DBHandler handler = new DBHandler();
-		String SQL = "SELECT * FROM board WHERE id = " + id;
-
-		for (int i = 0; i < 25; i++) {
-			String res = handler.getResultString(SQL, "value" + i);
-			if (res.equals(num.toString())) {
-				handler.executeSQL("UPDATE flags SET flag" + i + " = " + 1 + " WHERE id = " + id);
-				break;
-			}
-		}
-	}
 }

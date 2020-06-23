@@ -1,6 +1,8 @@
 package bingo;
 
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.websocket.OnClose;
@@ -12,9 +14,17 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
 public class WSServlet {
 
-	private static List<Session> ses = new CopyOnWriteArrayList<>();
+	private static List<Session> ses = new CopyOnWriteArrayList<>(); // セッションを格納
+	private static Map<Session, int[][]> flags = new Hashtable<>(); // セッションとビンゴ判定用の配列を格納
 	private Session session;
 	private int id; // session id
+
+	@OnOpen
+	public void onOpen(Session session) {
+		System.out.println("onOpen : " + session);
+		this.session = session;
+		ses.add(session);
+	}
 
 	@OnMessage
 	public void onMessage(ReceivedMessage rm) {
@@ -25,36 +35,20 @@ public class WSServlet {
 
 		// ビンゴボードの数値をデータベースに保存するためのINSERT文を作成する
 		String[] values = rm.values.split(",");
-		String SQL1 = "INSERT INTO board VALUES (";
-		SQL1 += id;
-		SQL1 += " ,'" + rm.name + "'";
+		String SQL = "INSERT INTO board VALUES (";
+		SQL += id;
+		SQL += " ,'" + rm.name + "'";
 		for (int i = 0; i < 25; i++) {
-			SQL1 += " ,'" + values[i] + "'";
+			SQL += " ,'" + values[i] + "'";
 		}
-		SQL1 += ")";
-		handler.executeSQL(SQL1);
+		SQL += ")";
+		handler.executeSQL(SQL);
 
-		// ビンゴ判定用のフラグ列をデータベースに保存するためのINSERT文を作成する
-		int[] flags = {0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0,
-				0, 0, 1, 0, 0,
-				0, 0, 0, 0, 0,
-				0, 0, 0, 0, 0};
-		String SQL2 = "INSERT INTO flags VALUES (";
-		SQL2 += id;
-		SQL2 += " ,'" + rm.name + "'";
-		for (int i = 0; i < 25; i++) {
-			SQL2 += " ," + flags[i];
-		}
-		SQL2 += ")";
-		handler.executeSQL(SQL2);
-	}
+		// ビンゴ判定用のフラグ
+		int[][] grid = new int[5][5];
+		grid[2][2] = 1;
+		flags.put(session, grid);
 
-	@OnOpen
-	public void onOpen(Session session) {
-		System.out.println("onOpen : " + session);
-		this.session = session;
-		ses.add(session);
 	}
 
 	@OnClose
@@ -73,5 +67,9 @@ public class WSServlet {
 
 	public static List<Session> getSessionSet() {
 		return ses;
+	}
+
+	public static Map<Session, int[][]> getFlags() {
+		return flags;
 	}
 }

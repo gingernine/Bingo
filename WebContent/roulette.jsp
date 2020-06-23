@@ -3,7 +3,7 @@
 	import="bingo.DBHandler"
 	import="java.util.ArrayList"
 	import="java.util.List"%>
-<!DOCTYPE html>
+
 <%
 	//boolean isPOST = request.getMethod().toLowerCase().equals("post");
 	boolean isRoulette = request.getParameter("roulette") != null;
@@ -14,35 +14,30 @@
 	if (isRoulette) {
 		Roulette.sendResOfRoulette();
 	}
+
 	if (isCreate) {
+
 		DBHandler handler = new DBHandler();
 
-		String SQL1 = "CREATE TABLE board (";
-		SQL1 += "id INTEGER";
-		SQL1 += ", name VARCHAR(20)";
+		String SQL = "CREATE TABLE board (";
+		SQL += "id INTEGER";
+		SQL += ", name VARCHAR(20)";
 		for (int i = 0; i < 25; i++) {
-			SQL1 += ", value" + i + " VARCHAR(20)";
+			SQL += ", value" + i + " VARCHAR(20)";
 		}
-		SQL1 += ")";
-		handler.executeSQL(SQL1);
-
-		String SQL2 = "CREATE TABLE flags (";
-		SQL2 += "id INTEGER";
-		SQL2 += ", name VARCHAR(20)";
-		for (int i = 0; i < 25; i++) {
-			SQL2 += ", flag" + i + " INTEGER";
-		}
-		SQL2 += ")";
-		handler.executeSQL(SQL2);
+		SQL += ", PRIMARY KEY(id))";
+		handler.executeSQL(SQL);
 
 	}
 
 	if (isDrop) {
 		DBHandler handler = new DBHandler();
 		handler.executeSQL("DROP TABLE board");
-		handler.executeSQL("DROP TABLE flags");
 	}
+
 %>
+
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">

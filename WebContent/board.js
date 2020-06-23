@@ -26,7 +26,7 @@ $(function() {
 		console.log("Number received from Servlet: " + event.data);
 		var d = separator(event.data);
 
-		$("#message").html(d.num);
+		$("#message").html(d.num + d.message);
 
 		for (var i = 0; i < 25; i++) {
 			if (arrayOfBoardNums[i] == d.num) {
@@ -113,6 +113,8 @@ $(function() {
 
 		var msg = "username:" + username + ";values:" + values;
 		ws.send(msg);
+
+		$("#number12").css("background", "red");
 
 		$(".card").attr("readonly", true);
 		$("#send").attr("disabled", true);
