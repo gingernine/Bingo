@@ -58,7 +58,6 @@ public class WSServlet {
 
 		DBHandler handler = new DBHandler();
 		handler.executeSQL("DELETE FROM board WHERE id = " + id);
-		handler.executeSQL("DELETE FROM flags WHERE id = " + id);
 	}
 
 	public static void sendMessage(String message, Session session) {
