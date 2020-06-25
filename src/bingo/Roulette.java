@@ -52,8 +52,12 @@ public class Roulette {
 
 			if (isBingo(grid)) {
 				message += "Bingo!";
+				String name = handler.getResultString(SQL, "name");
+				System.out.println(name + " : Bingo!");
 			} else if (isReach(grid)) {
 				message += "Reach!";
+				String name = handler.getResultString(SQL, "name");
+				System.out.println(name + " : Reach!");
 			}
 
 			message += ";num:" + num.toString();
