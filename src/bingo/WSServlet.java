@@ -1,5 +1,6 @@
 package bingo;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/wsservlet", decoders = MyDecoder.class)
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@ServerEndpoint(value = "/wsservlet")
 public class WSServlet {
 
 	private static List<Session> ses = new CopyOnWriteArrayList<>(); // セッションを格納
@@ -27,19 +30,26 @@ public class WSServlet {
 	}
 
 	@OnMessage
-	public void onMessage(ReceivedMessage rm) {
+	public void onMessage(String message) {
 		System.out.println("Message received from " + session.getId());
 
 		DBHandler handler = new DBHandler();
 		id = Integer.parseInt(session.getId());
 
 		// ビンゴボードの数値をデータベースに保存するためのINSERT文を作成する
-		String[] values = rm.values.split(",");
+		ObjectMapper mapper = new ObjectMapper();
+		ReceivedMessage rm = null;
+		try {
+			rm = mapper.readValue(message, ReceivedMessage.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		String SQL = "INSERT INTO board VALUES (";
 		SQL += id;
-		SQL += " ,'" + rm.name + "'";
+		SQL += " ,'" + rm.username + "'";
 		for (int i = 0; i < 25; i++) {
-			SQL += " ,'" + values[i] + "'";
+			SQL += " ,'" + rm.values[i] + "'";
 		}
 		SQL += ")";
 		handler.executeSQL(SQL);

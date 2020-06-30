@@ -67,9 +67,7 @@ $(function() {
 		console.log(arrayOfBoardNums);
 
 		/*
-		 * 入力数値のバリデーションチェックをする
-		 */
-		/*
+		 * 入力数値のバリデーションチェック
 		 * 1から75までの数値に一致しなければ警告画面を表示する
 		 */
 		const regex1 = RegExp('^[1-9]$');
@@ -102,17 +100,12 @@ $(function() {
 
 		$("#alert").html("");
 
-		/*
-		 * サーブレットにはテキストで送るので
-		 * ビンゴボードの数値をカンマ区切りで連結する
-		 */
-		var values = "";
-		for (var i = 0; i < 25; i++) {
-			values += arrayOfBoardNums[i] + ",";
-		}
+		var msg = {
+				username : username,
+				values : arrayOfBoardNums
+		};
 
-		var msg = "username:" + username + ";values:" + values;
-		ws.send(msg);
+		ws.send(JSON.stringify(msg));
 
 		$("#number12").css("background", "red");
 

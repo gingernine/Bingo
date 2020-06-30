@@ -1,6 +1,6 @@
 package bingo;
 
 public class ReceivedMessage {
-	public String name;
-	public String values;
+	public String username;
+	public String[] values;
 }
