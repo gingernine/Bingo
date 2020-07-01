@@ -41,24 +41,23 @@ public class WSServlet {
 		ReceivedMessage rm = null;
 		try {
 			rm = mapper.readValue(message, ReceivedMessage.class);
+
+			String SQL = "INSERT INTO board VALUES (";
+			SQL += id;
+			SQL += " ,'" + rm.username + "'";
+			for (int i = 0; i < 25; i++) {
+				SQL += " ,'" + rm.values[i] + "'";
+			}
+			SQL += ")";
+			handler.executeSQL(SQL);
+
+			// ビンゴ判定用のフラグ
+			int[][] grid = new int[5][5];
+			grid[2][2] = 1;
+			flags.put(session, grid);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		String SQL = "INSERT INTO board VALUES (";
-		SQL += id;
-		SQL += " ,'" + rm.username + "'";
-		for (int i = 0; i < 25; i++) {
-			SQL += " ,'" + rm.values[i] + "'";
-		}
-		SQL += ")";
-		handler.executeSQL(SQL);
-
-		// ビンゴ判定用のフラグ
-		int[][] grid = new int[5][5];
-		grid[2][2] = 1;
-		flags.put(session, grid);
-
 	}
 
 	@OnClose
